@@ -108,7 +108,7 @@ void write_source_point(const char* filename, bool surf_source_bank)
   file_close(file_id);
 }
 
-/*This bit is cpoied over from openmc*/
+/*This bit is copied over from openmc*/
 
 
 void write_source_bank(hid_t group_id, bool surf_source_bank)
