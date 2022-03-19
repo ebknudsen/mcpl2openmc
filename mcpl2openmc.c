@@ -2,7 +2,10 @@
 #include <cstdio>
 #include <openmc/hdf5_interface>
 #include <mcpl.h>
+
+#ifdef __cplusplus
 extern "C" {
+#endif
 
   enum pdgcodes {PDGNEUTRON=2112, PDG_PHOTON=22, PDG_ELECTRON=11, PDG_POSITRON=-11};
 
@@ -32,14 +35,12 @@ int main (int argc, char *argv[]){
   const char mcpl_filename="myfile.mcpl";
   const char openmc_filename="source_bank.h5";
 
-
   /* open the input MCPL-file for reading*/
   mcpl_file_t f = mcpl_open_file(mcpl_filename);
   const mcpl_particle_t* p;
 
   /* open the openmc output file */
   hit_t openmc_source_file = file_open(openmc_filename);
-
 
   long long particle_count;
   i=0;
@@ -177,3 +178,7 @@ void write_source_bank(hid_t group_id, bool surf_source_bank)
 
   H5Tclose(banktype);
 }
+
+#ifdef __cplusplus
+}
+#endif
