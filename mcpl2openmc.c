@@ -1,13 +1,14 @@
 #include <math.h>
 #include <cstdio>
 #include <openmc/hdf5_interface>
+#include <openmc/simulation>
 #include <mcpl.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-  enum pdgcodes {PDGNEUTRON=2112, PDG_PHOTON=22, PDG_ELECTRON=11, PDG_POSITRON=-11};
+enum pdgcodes {PDGNEUTRON=2112, PDG_PHOTON=22, PDG_ELECTRON=11, PDG_POSITRON=-11};
 
 const int map_openmc2pdg[]{PDG_NEUTRON,PDG_PHOTON,PDG_ELECTRON, PDG_POSITRON};
 
@@ -24,6 +25,24 @@ int map_pdg2openmc(int pdg_code){
     default:
 	return 0;
   }
+}
+
+Class sourceBank {
+  const int batch_size=20;
+  vector <SourceSite> openmc_ptcl_bank{batch_size};
+  vector <mcpl_particle_type> mcpl_ptcl_bank{batch_size};
+};
+
+int sourceBank::fill_from_openmc(){
+  /*read from the openmc file into the bank*/
+}
+
+int sourceBank::fill_from_nmcpl(){
+  /*read from an mcpl-file into bank*/
+}
+
+int sourcebank::flush_to_mcpl(){
+  /*flush the buffer to mcpl*/
 }
 
 int main (int argc, char *argv[]){
@@ -121,6 +140,8 @@ void write_source_bank(hid_t group_id, bool surf_source_bank)
   int64_t count_size = simulation::work_per_rank;
 
   // Set vectors for source bank and starting bank index of each process
+  // simulation is a namespace, in which source_bank lives. source_bank is declared in bank.h
+  // in OpenMC it is allocated in simulation.cpp (allocate banks) Should simply replicate that
   vector<int64_t>* bank_index = &simulation::work_index;
   vector<SourceSite>* source_bank = &simulation::source_bank;
   vector<int64_t> surf_source_index_vector;
